@@ -2,11 +2,12 @@ import pygame
 from settings import *
 from tile import Tile
 from player import Player
+from debug import debug
 
 
 class Level:
     def __init__(self):
-        # Get the display so we can draw each level on it
+        # Get the display, so we can draw each level on it
         self.display_surface = pygame.display.get_surface()
 
         # Split all the assets into two different sprites groups
@@ -16,18 +17,23 @@ class Level:
         self.create_map()
 
     def create_map(self):
-        for i in range(len(WORLD_MAP)):
-            for j in range(len(WORLD_MAP[0])):
-                x = j * TILE_SIZE
-                y = i * TILE_SIZE
+        for r_index, row in enumerate(WORLD_MAP):
+            for c_index, col in enumerate(row):
+                x = c_index * TILE_SIZE
+                y = r_index * TILE_SIZE
 
-                if WORLD_MAP[i][j] == 'x':
+                if col == 'x':
                     Tile(pos=(x, y), groups=[self.visible_sprites, self.obstacle_sprites])
-                elif WORLD_MAP[i][j] == 'p':
-                    Player(pos=(x, y), groups=[self.visible_sprites])
+                elif col == 'p':
+                    self.player = Player(pos=(x, y), groups=[self.visible_sprites],
+                                         obstacle_sprites=self.obstacle_sprites)
 
     # Update and draw the game
     def run(self):
         # The sprite.Group.draw will blit all the sprite images on the specified surface
         self.visible_sprites.draw(self.display_surface)
+
+        # Update all the sprites that belongs to the visible_sprites group
+        self.visible_sprites.update()
+        debug(self.player.direction)
 
