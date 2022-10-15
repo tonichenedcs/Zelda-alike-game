@@ -1,7 +1,7 @@
 WIDTH = 1280
 HEIGHT = 720
 FPS = 60
-TITLE_SIZE = 64
+TILE_SIZE = 64
 
 # The map is encoded as list of lists
 # p: Player
